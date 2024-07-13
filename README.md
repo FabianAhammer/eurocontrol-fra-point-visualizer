@@ -1,1 +1,2 @@
-# eurocontrol-fra-point-visualizer
+# Python powered Eurocontrol FRA Point viewer
+
