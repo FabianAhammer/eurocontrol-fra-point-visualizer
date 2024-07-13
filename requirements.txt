@@ -1,0 +1,17 @@
+pip~=22.2.1
+Jinja2~=3.1.4
+pytz~=2024.1
+numpy~=2.0.0
+setuptools~=63.2.0
+branca~=0.7.2
+folium~=0.17.0
+requests~=2.32.3
+pandas~=2.2.2
+xyzservices~=2024.6.0
+MarkupSafe~=2.1.5
+openpyxl~=3.1.5
+python-dateutil~=2.9.0.post0
+certifi~=2024.7.4
+urllib3~=2.2.2
+six~=1.16.0
+idna~=3.7
