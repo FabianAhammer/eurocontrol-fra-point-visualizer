@@ -2,12 +2,12 @@ import os
 import requests
 import re
 
-from utlis.eurocontrol_file_downloader import EurocontrolFileDownloader
+from utils.eurocontrol_file_downloader import EurocontrolFileDownloader
 
 if __name__ == "__main__":
     input_file_dir = "./input"
 
-    downloader = EurocontrolFileDownloader(input_file_dir)
+    downloader = EurocontrolFileDownloader(file_directory=input_file_dir)
     downloader.check_and_download_missing_files()
 
 # if not os.path.exists("./output"):
