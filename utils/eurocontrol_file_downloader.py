@@ -14,7 +14,7 @@ class EurocontrolFileDownloader:
     def __init__(self, file_directory: str) -> None:
         self._file_directory = file_directory
 
-    def check_and_download_missing_files(self) -> list[str]:
+    def check_and_download_missing_files(self) -> None:
         current_files = os.listdir(self._file_directory)
         available_files = self.discover_files_to_download()
 
@@ -22,12 +22,12 @@ class EurocontrolFileDownloader:
             link = self.get_link_for_file(available)
             file_name_for_available = link.split("/")[-1]
             if not current_files.__contains__(file_name_for_available):
-                file = requests.get(link)
-                with open(
-                    f"{self._file_directory}/{file_name_for_available}", "wb"
-                ) as fh:
-                    fh.write(file.content)
-                    fh.flush()
+                self.write_to_fs(requests.get(link), file_name_for_available)
+
+    def write_to_fs(self, file, file_name: str) -> None:
+        with open(f"{self._file_directory}/{file_name}", "wb") as fh:
+            fh.write(file.content)
+            fh.flush()
 
     def discover_files_to_download(self) -> list[str]:
         site_content = str(requests.get(self._point_overview_uri).content)
