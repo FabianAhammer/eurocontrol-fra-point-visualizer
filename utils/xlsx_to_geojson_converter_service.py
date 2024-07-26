@@ -36,15 +36,40 @@ class XlsxToGeojsonConverterService:
             )
         )
 
+    def unique_string_internals(self, first: str, second: str) -> str:
+        arr = []
+        if first:
+            arr += first.split(",")
+        if second:
+            arr += second.split(",")
+        return ",".join(set(arr))
+
     def convert_file(self, xlsx_data: pd.DataFrame, cycle: str) -> json:
+        fra_points: list[str]
+        fra_dict: dict[str, FraPoint] = {}
+        for _, series in xlsx_data.iterrows():
+            point = FraPoint(series, cycle)
+            # Copy over data to already set point
+            if point.name in fra_dict:
+                fra_dict[point.name].roles = list(
+                    set(point.roles + fra_dict[point.name].roles)
+                )
+                fra_dict[point.name].arrival_airports = self.unique_string_internals(
+                    fra_dict[point.name].arrival_airports, point.arrival_airports
+                )
+                fra_dict[point.name].departure_airports = self.unique_string_internals(
+                    fra_dict[point.name].departure_airports, point.departure_airports
+                )
+                fra_dict[point.name].fra_zone = self.unique_string_internals(
+                    fra_dict[point.name].fra_zone, point.fra_zone
+                )
+            else:
+                fra_dict[point.name] = point
 
         return json.dumps(
             {
                 "type": "FeatureCollection",
-                "features": [
-                    FraPoint(series, cycle).to_geo_json()
-                    for _, series in xlsx_data.iterrows()
-                ],
+                "features": list(map(lambda x: x.to_geo_json(), fra_dict.values())),
             },
             separators=(",", ":"),
         )
