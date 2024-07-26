@@ -47,7 +47,7 @@ class FraPoint:
         return {
             "type": "Feature",
             "properties": {
-                "name": f"{self.name} | {self.roles}",
+                "name": f"{self.name}",
                 "tooltip": self.generate_tooltip(),
                 "role": "".join(sorted([role.value for role in self.roles])),
             },

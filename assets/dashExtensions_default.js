@@ -8,6 +8,11 @@ window.dashExtensions = Object.assign({}, window.dashExtensions, {
             return L.marker(latlng, {
                 icon: flag
             });
+        },
+        function1: function(feature, context) {
+            if (!feature?.properties?.name)
+                return true
+            return context.hideout.length == 0 || context.hideout.find(e => feature.properties.name.toLowerCase().includes(e.toLowerCase()))
         }
     }
 });
