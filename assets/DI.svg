@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 48 48"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="half_waypoint.svg"
+   inkscape:export-filename="Desktop\waypoint_EXIDA.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#b8b8b8"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="false"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="12.668997"
+     inkscape:cx="5.5252995"
+     inkscape:cy="28.849957"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch17"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop17" />
+    </linearGradient>
+  </defs>
+   <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="matrix(3.7906854,0,0,3.7644956,3.0404125,4.4996046)"
+     style="display:inline"> <g
+       id="g2"
+       inkscape:label="intermediate"
+       style="display:inline">
+      <path
+         id="path4"
+         style="stroke-width:0.264583"
+         d="m 5.110238,-1.9961915 -3.6261139,6.3084741 3.638561,-0.00709 0.00296,-5.4e-6 z"
+         transform="matrix(1.7407582,0.00365943,-0.00425618,2.0246232,-3.3615543,2.8171843)"
+         inkscape:label="outside" />
+      <path
+         id="path5"
+         style="fill:#ffffff;stroke-width:0.264583"
+         inkscape:transform-center-x="0.0012984433"
+         inkscape:transform-center-y="-1.2998527"
+         d="M 5.1331771,-1.9580764 5.1106742,-1.9970212 1.4841791,4.3121774 5.1484907,4.305135 Z"
+         transform="matrix(1.1267122,0.00223704,-0.00275483,1.2376673,-0.24534633,4.5491208)"
+         inkscape:label="inside" />
+    </g> <path
+       style="fill:#ff1c7f;fill-opacity:1;stroke-width:0.4642"
+       d="m 6.3618334,2.7629121 c 0,0 -0.7134612,-0.7924837 -0.7017155,-0.873895 0.018763,-0.1299935 0.1757627,-0.3018555 0.2410848,-0.2827267 0.099477,0.02913 0.5715229,0.2591148 0.871255,0.2551329 0.1090226,-0.00145 1.0136135,-0.6886359 1.0136135,-0.6886359 0,0 -1.1369614,-1.16972675 -1.1726986,-1.31293125 -0.032676,-0.1309381 0.264171,-0.6079987 0.5042328,-0.5913278 0.136381,0.00947 2.038191,0.6573958 2.1761935,0.6372639 0.098722,-0.014403 1.1191771,-0.7603547 1.1191771,-0.7603547 0,0 0.638332,-0.40295645 0.960492,-0.30861725 0.107724,0.031545 0.222791,0.1409981 0.238581,0.26711055 0.02278,0.1819448 -0.123665,0.3492404 -0.23577,0.4807099 C 11.20713,-0.21699405 6.808118,2.8810133 6.5121822,2.8772516 6.4540431,2.8765135 6.3618299,2.7629162 6.3618299,2.7629162 Z"
+       id="path8"
+       sodipodi:nodetypes="cssscssscsssscc"
+       inkscape:label="depature" />  </g>
+</svg>

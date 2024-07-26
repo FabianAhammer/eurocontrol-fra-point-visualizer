@@ -49,6 +49,7 @@ class FraPoint:
             "properties": {
                 "name": f"{self.name} | {self.roles}",
                 "tooltip": self.generate_tooltip(),
+                "role": "".join(sorted([role.value for role in self.roles])),
             },
             "geometry": {
                 "coordinates": [self.longitude, self.latitude],
@@ -62,12 +63,12 @@ class FraPoint:
     def generate_arrival_and_departure(self) -> str:
         arr_and_dep: str = ""
         if self.arrival_airports:
-            arr_and_dep += f"Arr. Airports: {self.arrival_airports}"
+            arr_and_dep += f"<b>Arr. Airports:</b> {self.arrival_airports}"
 
         if self.arrival_airports and self.departure_airports:
             arr_and_dep += " <br /> "
         if self.departure_airports:
-            arr_and_dep += f"Dep. Airports: {self.departure_airports}"
+            arr_and_dep += f"<b>Dep. Airports: </b> {self.departure_airports}"
         return arr_and_dep + "<br/> "
 
     @staticmethod
@@ -75,15 +76,15 @@ class FraPoint:
         role_html = ""
         for role in roles:
             if role == point_type.ENTRY:
-                role_html += '<span style="color:orange;font-weight:bold">E</span> '
+                role_html += '<span style="color:#00bd16ff;font-weight:bold">E</span> '
             elif role == point_type.EXIT:
-                role_html += '<span style="color:red;font-weight:bold">X</span> '
+                role_html += '<span style="color:#ff3c00ff;font-weight:bold">X</span> '
             elif role == point_type.INTERMEDIATE:
                 role_html += '<span style="color:grey;font-weight:bold">I</span> '
             elif role == point_type.DEP:
-                role_html += '<span style="color:blue;font-weight:bold">D</span> '
+                role_html += '<span style="color:#ff1c7fff;font-weight:bold">D</span> '
             elif role == point_type.ARR:
-                role_html += '<span style="color:green;font-weight:bold">A</span> '
+                role_html += '<span style="color:#0000ffff;font-weight:bold">A</span> '
         return role_html
 
     @staticmethod

@@ -1,0 +1,6 @@
+input/
+output/
+.venv/
+.idea/
+.vscode/
+__pycache__/
