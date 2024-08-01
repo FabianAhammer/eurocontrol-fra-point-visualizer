@@ -57,6 +57,9 @@ class FraPoint:
             },
         }
 
+    def identity(self) -> str:
+        return f"{self.name}{self.latitude}{self.longitude}"
+
     def generate_tooltip(self) -> str:
         return f"<b>{self.name}</b>      Roles: {FraPoint.generate_html_for_roles(self.roles)} <br/> <b>FRA Zone:</b> {self.fra_zone} <br/> {self.generate_arrival_and_departure()} <b>Cycle</b> {self.cycle}"
 
