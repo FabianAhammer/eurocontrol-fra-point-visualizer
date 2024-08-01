@@ -1,14 +1,20 @@
 import json
 import os
+from threading import Thread
 from dash import Dash, html, dcc, State, callback, Output, Input, no_update
 import dash_leaflet as dl
 from dash_extensions.javascript import assign
+import sys
 
 from utils.eurocontrol_file_downloader import EurocontrolFileDownloader
 from utils.fra_file_utils import FraFileUtils
 from utils.xlsx_to_geojson_converter_service import XlsxToGeojsonConverterService
+
+import flask
 from flask import Flask
 
+
+STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
 server = Flask(__name__)
 
 app = Dash(server=server)
@@ -17,12 +23,20 @@ output_file_dir = "./output"
 
 
 def update_loop_date() -> list[str]:
-
     if not os.path.exists("./input"):
         os.mkdir("./input")
+    worker: Thread = Thread(target=async_update_loop)
+    worker.daemon = True
+    worker.start()
+    converter = XlsxToGeojsonConverterService(
+        source_file_directory=input_file_dir, output_file_directory=output_file_dir
+    )
+    return converter.get_available_files()
+
+
+def async_update_loop() -> None:
     downloader = EurocontrolFileDownloader(file_directory=input_file_dir)
     downloader.check_and_download_missing_files()
-
     if not os.path.exists("./output"):
         os.mkdir("./output")
     converter = XlsxToGeojsonConverterService(
@@ -120,11 +134,11 @@ def session_action(selected_value, _):
 
 
 @callback(
-    Output("frapoints-geojson", "data"),
+    Output("frapoints-geojson", "url"),
     Input("cycle-selector", "value"),
 )
 def dropdown_action(cycle_as_file):
-    file = read_output_file(cycle_as_file)
+    file = f"static/{cycle_as_file}"
     return file
 
 
@@ -141,6 +155,16 @@ app.clientside_callback(
     prevent_initial_call=True,
 )
 
-if __name__ == "__main__":
 
-    app.run_server()
+@server.route("/static/<resource>")
+def serve_static(resource):
+    return flask.send_from_directory(STATIC_PATH, resource)
+
+
+if __name__ == "__main__":
+    print(os.listdir(STATIC_PATH))
+    if sys.argv.__len__() == 2 and sys.argv[1] == "debug":
+        debug_app = app
+        debug_app.run(debug=True)
+    else:
+        app.run_server()
