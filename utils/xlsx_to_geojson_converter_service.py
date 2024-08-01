@@ -29,6 +29,9 @@ class XlsxToGeojsonConverterService:
                 )
                 with open(f"{self._output_file_directory}/{file_name}.json", "w") as fw:
                     fw.write(data)
+        return self.get_available_files()
+
+    def get_available_files(self) -> list[str]:
         return list(
             filter(
                 lambda x: x.split(".").__len__() > 1 and x.split(".")[1] == "json",
@@ -45,26 +48,31 @@ class XlsxToGeojsonConverterService:
         return ",".join(set(arr))
 
     def convert_file(self, xlsx_data: pd.DataFrame, cycle: str) -> json:
-        fra_points: list[str]
         fra_dict: dict[str, FraPoint] = {}
         for _, series in xlsx_data.iterrows():
             point = FraPoint(series, cycle)
             # Copy over data to already set point
-            if point.name in fra_dict:
-                fra_dict[point.name].roles = list(
-                    set(point.roles + fra_dict[point.name].roles)
+            if point.identity() in fra_dict:
+                fra_dict[point.identity()].roles = list(
+                    set(point.roles + fra_dict[point.identity()].roles)
                 )
-                fra_dict[point.name].arrival_airports = self.unique_string_internals(
-                    fra_dict[point.name].arrival_airports, point.arrival_airports
+                fra_dict[point.identity()].arrival_airports = (
+                    self.unique_string_internals(
+                        fra_dict[point.identity()].arrival_airports,
+                        point.arrival_airports,
+                    )
                 )
-                fra_dict[point.name].departure_airports = self.unique_string_internals(
-                    fra_dict[point.name].departure_airports, point.departure_airports
+                fra_dict[point.identity()].departure_airports = (
+                    self.unique_string_internals(
+                        fra_dict[point.identity()].departure_airports,
+                        point.departure_airports,
+                    )
                 )
-                fra_dict[point.name].fra_zone = self.unique_string_internals(
-                    fra_dict[point.name].fra_zone, point.fra_zone
+                fra_dict[point.identity()].fra_zone = self.unique_string_internals(
+                    fra_dict[point.identity()].fra_zone, point.fra_zone
                 )
             else:
-                fra_dict[point.name] = point
+                fra_dict[point.identity()] = point
 
         return json.dumps(
             {
