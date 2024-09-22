@@ -1,5 +1,8 @@
+name: fra-viz
+
 services:
   backend:
+    container_name: fra-viz-backend
     build: . 
     tty: true
     ports:
@@ -8,6 +11,7 @@ services:
       - "./output:/FRA/output"
       - "./input:/FRA/input"
   frontend:
+    container_name: fra-viz-frontend
     image: node:18-alpine
     volumes:
       - .frontend:/frontend

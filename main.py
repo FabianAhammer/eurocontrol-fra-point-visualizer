@@ -161,6 +161,11 @@ def serve_static(resource):
     return flask.send_from_directory(STATIC_PATH, resource)
 
 
+@server.route("/available")
+def serve_static_2():
+    return list(filter(lambda x: ".json" in x, os.listdir(STATIC_PATH)))
+
+
 if __name__ == "__main__":
     print(os.listdir(STATIC_PATH))
     if sys.argv.__len__() == 2 and sys.argv[1] == "debug":

@@ -1,8 +1,31 @@
 body {
     margin: unset;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #map {
-    height: 100vh;
+    height: calc(100vh - 5rem);
     width: 100vw;
+}
+
+.top-bar {
+    height: 5rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+}
+
+.top-bar>div {
+    text-align: center;
+}
+
+.input-style {
+    width: 20rem;
+    padding: .5rem;
+    background: white;
+    outline: rgba(0, 0, 0, 0.75);
+    border-radius: .45rem;
+    border: hidden;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 7px;
+    font-size: .8rem;
 }
