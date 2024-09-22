@@ -1,9 +1,17 @@
 services:
-  web:
-    image: eurocontrol-fra-viz
+  backend:
+    build: . 
     tty: true
     ports:
       - "8050:8050"
     volumes:
       - "./output:/FRA/output"
       - "./input:/FRA/input"
+  frontend:
+    image: node:18-alpine
+    volumes:
+      - .frontend:/frontend
+    working_dir: /frontend
+    command: ["sh", "-c", "npm install -g live-server && live-server --host=0.0.0.0"]  # Serve the files using live-server
+    ports:
+      - 8080:8080
