@@ -28,10 +28,3 @@ How to run with docker:
     #start in compose in daemon mode
     docker-compose up -d
 ```
-
-### FAQ:
-
-- **My Server takes a long first startup time, why?**
-
-  Initially the server will download all currently available FRA files, which takes a while and parses its geojson.
-  Should only be the first load, of the first user though!
