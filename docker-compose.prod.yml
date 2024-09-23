@@ -7,9 +7,3 @@ services:
     volumes:
       - "./output:/FRA/output"
       - "./input:/FRA/input"
-
-  frontend:
-    image: registry.skybitches.at/fra-viz-frontend
-    restart: always
-    ports:
-      - 9999:3000
