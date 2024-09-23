@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Eurocontrol FRA Points</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://cdn.rawgit.com/mapbox/supercluster/v4.0.1/demo/cluster.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/supercluster@8.0.0/dist/supercluster.min.js"></script>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <style>
+        body {
+    margin: unset;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#map {
+    height: calc(100vh - 5rem);
+    width: 100vw;
+}
+
+.top-bar {
+    height: 5rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+}
+
+.top-bar>div {
+    text-align: center;
+}
+
+.input-style {
+    width: 20rem;
+    padding: .5rem;
+    background: white;
+    outline: rgba(0, 0, 0, 0.75);
+    border-radius: .45rem;
+    border: hidden;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 7px;
+    font-size: .8rem;
+}
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <div>
+            <select class="input-style" id="cycle-switch" onchange="switch_cycle">
+            </select>
+        </div>
+        <div>
+            <h1>Eurocontrol FRA Points</h1>
+        </div>
+        <div>
+            <input class="input-style" id="point-search" placeholder="Search Point" type="text" />
+        </div>
+    </div>
+    <div id="map"></div>
+</body>
+<script>
+load_cycles();
+
+
+const map = L.map('map').setView([48, 12], 5);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+let index = null;
+let markers = L.geoJSON(null, {
+    pointToLayer: createClusterIcon,
+    onEachFeature
+}).addTo(map);
+const search_bar = document.getElementById("point-search");
+let ready = false;
+let searchTerm = null
+
+map.on('moveend', updateMarkers);
+search_bar.addEventListener("input", update_search)
+
+
+// Add initial markers
+
+// Zoom to expand the cluster clicked by user.
+markers.on('click', function (e) {
+    var clusterId = e.layer.feature.properties.cluster_id;
+    var center = e.latlng;
+    var expansionZoom;
+    if (clusterId) {
+        expansionZoom = index.getClusterExpansionZoom(clusterId);
+        map.flyTo(center, expansionZoom);
+    }
+});
+
+async function update_search() {
+    searchTerm = search_bar.value;
+    updateMarkers();
+}
+
+async function load_cycles() {
+    let uri = "/static/available"
+    available_cycles = await (await fetch(uri)).json();
+    let cycle_switch = document.getElementById("cycle-switch");
+    bestOption = null
+    available_cycles.sort((a, b) => a.split("-")[1] < b.split("-")[1]).forEach((e, i) => {
+        if (!bestOption) {
+            bestOption = e
+        }
+        cycle_switch.options[i] = new Option(e.split("-")[1], e);
+    })
+
+    cycle_switch.addEventListener("input", switch_cycle)
+
+    setup_geo_json_layer(bestOption);
+}
+
+async function switch_cycle(newoption) {
+    let cycle_switch = document.getElementById("cycle-switch");
+    markers.clearLayers();
+    setup_geo_json_layer(cycle_switch.value)
+}
+
+async function setup_geo_json_layer(option) {
+    let uri = `/static/${option}`
+    // let uri = "https://cdn.rawgit.com/mapbox/supercluster/v4.0.1/test/fixtures/places.json"
+    geo_json = await (await fetch(uri)).json();
+    index = new Supercluster({
+        radius: 100, // Cluster radius in pixels
+        minZoom: 2,
+        minPoints: 8
+    }).load(geo_json.features);
+    ready = true;
+    updateMarkers();
+}
+
+function onEachFeature(feature, layer) {
+    if (feature.properties && feature.properties.tooltip) {
+        layer.bindTooltip(`${feature.properties.tooltip}`)
+        layer.bindPopup(`${feature.properties.tooltip}`)
+    }
+}
+
+// Function to create markers or clusters
+function updateMarkers() {
+    if (!ready) return;
+    var bounds = map.getBounds();
+    var bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];
+    var zoom = map.getZoom();
+    var clusters = index.getClusters(bbox, zoom);
+    markers.clearLayers();
+    if (searchTerm) {
+        markers.addData(index.points.filter(e => e?.properties?.name != null && e.properties.name.toUpperCase().includes(searchTerm.toUpperCase())));
+    }
+    else {
+        markers.addData(clusters);
+    }
+
+
+}
+
+function createClusterIcon(feature, latlng) {
+    if (!feature.properties.cluster) {
+        const flag = L.icon({ iconUrl: `./static/${feature.properties.role}.svg`, iconSize: [24, 24] });
+        return L.marker(latlng, { icon: flag, title: feature.properties.name });
+    }
+
+    var count = feature.properties.point_count;
+    var size =
+        count < 100 ? 'small' :
+            count < 1000 ? 'medium' : 'large';
+    var icon = L.divIcon({
+        html: '<div><span>' + feature.properties.point_count_abbreviated + '</span></div>',
+        className: 'marker-cluster marker-cluster-' + size,
+        iconSize: L.point(40, 40)
+    });
+    return L.marker(latlng, {
+        icon: icon
+    });
+}
+
+</script>
+
+</html>

@@ -1,10 +1,7 @@
-name: fra-viz
-
 services:
   backend:
-    container_name: fra-viz-backend
-    build: . 
-    tty: true
+    image: registry.skybitches.at/eurocontrol-fra-viz
+    restart: always
     ports:
       - "8050:8050"
     volumes:
