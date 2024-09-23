@@ -1,9 +1,5 @@
-import json
 import os
 from threading import Thread
-from dash import Dash, html, dcc, State, callback, Output, Input, no_update
-import dash_leaflet as dl
-from dash_extensions.javascript import assign
 import sys
 
 from utils.eurocontrol_file_downloader import EurocontrolFileDownloader
@@ -11,13 +7,13 @@ from utils.fra_file_utils import FraFileUtils
 from utils.xlsx_to_geojson_converter_service import XlsxToGeojsonConverterService
 
 import flask
-from flask import Flask
+from flask import Flask, render_template
 
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
+ASSET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
 server = Flask(__name__)
 
-app = Dash(server=server)
 input_file_dir = "./input"
 output_file_dir = "./output"
 
@@ -156,12 +152,17 @@ def async_update_loop() -> None:
 # )
 
 
+@server.route("/")
+def serve_html():
+    return render_template("index.html")
+
+
 @server.route("/static/<resource>")
 def serve_static(resource):
     return flask.send_from_directory(STATIC_PATH, resource)
 
 
-@server.route("/available")
+@server.route("/static/available")
 def serve_static_2():
     update_loop_date()
     return list(filter(lambda x: ".json" in x, os.listdir(STATIC_PATH)))
@@ -170,7 +171,7 @@ def serve_static_2():
 if __name__ == "__main__":
     print(os.listdir(STATIC_PATH))
     if sys.argv.__len__() == 2 and sys.argv[1] == "debug":
-        debug_app = app
+        debug_app = server
         debug_app.run(debug=True)
     else:
-        app.run_server()
+        server.run_server()

@@ -1,9 +1,15 @@
 services:
-  web:
-    image: eurocontrol-fra-viz
-    tty: true
+  backend:
+    image: registry.skybitches.at/eurocontrol-fra-viz
+    restart: always
     ports:
       - "8050:8050"
     volumes:
       - "./output:/FRA/output"
       - "./input:/FRA/input"
+
+  frontend:
+    image: registry.skybitches.at/fra-viz-frontend
+    restart: always
+    ports:
+      - 9999:3000

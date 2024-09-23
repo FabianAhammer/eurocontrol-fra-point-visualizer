@@ -12,10 +12,6 @@ services:
       - "./input:/FRA/input"
   frontend:
     container_name: fra-viz-frontend
-    image: node:18-alpine
-    volumes:
-      - .frontend:/frontend
-    working_dir: /frontend
-    command: ["sh", "-c", "npm install -g live-server && live-server --host=0.0.0.0"]  # Serve the files using live-server
+    build: ./frontend
     ports:
-      - 8080:8080
+      - 9999:3000
