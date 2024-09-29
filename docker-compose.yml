@@ -3,10 +3,9 @@ name: fra-viz
 services:
   backend:
     container_name: fra-viz-backend
-    build: . 
-    tty: true
+    build: .
     ports:
       - "8050:8050"
     volumes:
-      - "./output:/FRA/output"
-      - "./input:/FRA/input"
+      - ".:/FRA/"
+    command: sleep infinity

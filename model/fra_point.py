@@ -50,6 +50,7 @@ class FraPoint:
                 "name": f"{self.name}",
                 "tooltip": self.generate_tooltip(),
                 "role": "".join(sorted([role.value for role in self.roles])),
+                "fra": self.fra_zone
             },
             "geometry": {
                 "coordinates": [self.longitude, self.latitude],

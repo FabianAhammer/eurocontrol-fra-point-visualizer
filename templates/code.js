@@ -73,10 +73,17 @@ async function setup_geo_json_layer(option) {
     updateMarkers();
 }
 
+
+
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.tooltip) {
         layer.bindTooltip(`${feature.properties.tooltip}`)
         layer.bindPopup(`${feature.properties.tooltip}`)
+
+        // We have a FRA point, not a cluster
+        if (feature.properties.fra) {
+
+        }
     }
 }
 
